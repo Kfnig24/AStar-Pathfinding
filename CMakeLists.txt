@@ -28,3 +28,4 @@ if (APPLE)
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE include/)
+file(COPY resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
