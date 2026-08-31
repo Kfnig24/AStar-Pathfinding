@@ -1,5 +1,4 @@
 #include "algo.h"
-#include <array>
 
 using namespace std;
 
@@ -33,16 +32,32 @@ void Algorithm::Algo() {
   if (previousNode != nullptr && previousNode->state != START)
     previousNode->state = CLOSED;
 
-  if (openSet.empty())
+  if (openSet.empty()) {
+    isPathfinding = false;
+    isRunning = false;
     return;
+  }
 
-  Node *node = openSet.top();
-  openSet.pop();
-  if (node->state == CLOSED)
-    return;
+  Node *node = nullptr;
+  while (!openSet.empty()) {
+    node = openSet.top();
+    openSet.pop();
+    if (node->state == CLOSED)
+      continue;
+    break;
+  }
+
+  if (!node || node->state == CLOSED) {
+    if (openSet.empty()) {
+      isPathfinding = false;
+      isRunning = false;
+    }
+  }
+
   if (node == target) {
     isPathfinding = false;
     isBacktracking = true;
+    won = true;
     return;
   }
 
@@ -58,8 +73,8 @@ void Algorithm::Algo() {
     if (neighbor->state == CLOSED || neighbor->state == START)
       continue;
 
-    int g_temp = node->g + 1;
-    if (neighbor->state == OPEN && neighbor->g < g_temp)
+    float g_temp = node->g + 1;
+    if (neighbor->state == OPEN && neighbor->g <= g_temp)
       continue;
     neighbor->g = g_temp;
     neighbor->parent = node;
@@ -73,8 +88,11 @@ void Algorithm::Algo() {
 
 void Algorithm::Backtrack() {
   using enum NodeState;
-  if (pathNode == nullptr)
-    pathNode = target;
+  if (pathNode == nullptr) {
+    isBacktracking = false;
+    isRunning = false;
+    return;
+  }
 
   if (!(pathNode->state == TARGET || pathNode->state == START))
     pathNode->state = NodeState::PATH;
@@ -87,13 +105,25 @@ Algorithm::Algorithm(vector<Node> &m_grid, const int &m_nb_col,
       nb_row(m_nb_row) {
   openSet.push(startNode);
   previousNode = nullptr;
-  pathNode = nullptr;
+  pathNode = target;
+
+  startNode->g = 0.0f;
+  startNode->h = manhattanDistance(startNode, targetNode);
+  startNode->f = startNode->g + startNode->h;
+  startNode->parent = nullptr;
 }
 
 void Algorithm::Run() {
   using enum NodeState;
-  if (!isRunning)
+  if (!isRunning && won)
     return;
+
+  if (!isRunning && !won) {
+    for (Node* node : closedSet) {
+      if (node->state == START || node->state == TARGET) continue;
+      node->state = BLOCKED;
+    }
+  }
 
   if (isPathfinding && !isBacktracking)
     Algo();

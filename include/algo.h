@@ -8,7 +8,7 @@
 #define PRINT_DEBUG(fmt, ...)                                                  \
   std::cout << "[DEBUG] " << std::format(fmt, ##__VA_ARGS__) << endl
 
-enum class NodeState { EMPTY, WALL, START, TARGET, OPEN, CLOSED, CURRENT, PATH };
+enum class NodeState { EMPTY, WALL, START, TARGET, OPEN, CLOSED, CURRENT, PATH, BLOCKED };
 
 struct Node {
   int x;
@@ -53,6 +53,7 @@ private:
   bool isRunning = true;
   bool isPathfinding = true;
   bool isBacktracking = false;
+  bool won = false;
   const int &nb_col;
   const int &nb_row;
 

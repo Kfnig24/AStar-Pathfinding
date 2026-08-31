@@ -43,6 +43,9 @@ void Window::Draw() {
     case PATH:
       color = PINK;
       break;
+    case BLOCKED:
+      color = ORANGE;
+      break;
     }
 
     DrawRectangle(node.x * squareSize, node.y * squareSize, squareSize,
@@ -79,6 +82,11 @@ void Window::HandleInput() {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
       Node *node = getNodeFromWorldPos(mousePos.x, mousePos.y);
       if (node == nullptr)
+        return;
+      if ((node->x == 0 && node->y == 0) ||
+          (node->x == 0 && node->y == nb_row - 1) ||
+          (node->x == nb_col - 1 && node->y == 0) ||
+          (node->x == nb_col - 1 && node->y == nb_row - 1))
         return;
       node->state = startNode == nullptr ? START : TARGET;
       if (startNode == nullptr)
