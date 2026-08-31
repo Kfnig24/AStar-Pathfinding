@@ -1,1 +1,1 @@
-#A* Pathfinder Visualizer
+# A* Pathfinder Visualizer
