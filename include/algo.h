@@ -1,10 +1,14 @@
 #pragma once
 #include <array>
+#include <concepts>
+#include <iostream>
 #include <queue>
 #include <vector>
-#include <concepts>
 
-enum class NodeState { EMPTY, WALL, START, TARGET, OPEN, CLOSED };
+#define PRINT_DEBUG(fmt, ...)                                                  \
+  std::cout << "[DEBUG] " << std::format(fmt, ##__VA_ARGS__) << endl
+
+enum class NodeState { EMPTY, WALL, START, TARGET, OPEN, CLOSED, CURRENT, PATH };
 
 struct Node {
   int x;
@@ -26,9 +30,12 @@ concept Positionable = requires(T a) {
   { a.y } -> std::convertible_to<float>;
 };
 
-float manhattanDistance(Positionable auto* start, Positionable auto* target);
+float manhattanDistance(Positionable auto *start, Positionable auto *target);
 
-auto compare = [](const Node *a, const Node *b) { return a->f > b->f; };
+auto compare = [](const Node *a, const Node *b) { 
+    if (abs(a->f - b->f) < 0.001f) return a->h > b->h;
+    return a->f > b->f; 
+};
 
 using OpenSet =
     std::priority_queue<Node *, std::vector<Node *>, decltype(compare)>;
@@ -40,15 +47,20 @@ private:
   std::vector<Node *> closedSet;
 
   const Node *target;
+  Node *previousNode;
 
   bool isRunning = true;
+  bool isPathfinding = true;
+  bool isBacktracking = false;
   const int &nb_col;
   const int &nb_row;
 
-  void GetNeighbors(const Node *currentNode, std::vector<Node*>& neighbors);
+  void GetNeighbors(const Node *currentNode, std::vector<Node *> &neighbors);
+
+  void Algo();
 
 public:
-  Algorithm(std::vector<Node> &m_grid, const int &m_nb_col, const int &m_nb_row, Node *startNode,
-            Node *targetNode);
+  Algorithm(std::vector<Node> &m_grid, const int &m_nb_col, const int &m_nb_row,
+            Node *startNode, Node *targetNode);
   void Run();
 };

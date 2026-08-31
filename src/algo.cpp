@@ -27,20 +27,12 @@ void Algorithm::GetNeighbors(const Node *currentNode,
   }
 }
 
-Algorithm::Algorithm(vector<Node> &m_grid, const int &m_nb_col,
-                     const int &m_nb_row, Node *startNode, Node *targetNode)
-    : grid(m_grid), openSet(compare), target(targetNode), nb_col(m_nb_col),
-      nb_row(m_nb_row) {
-  openSet.push(startNode);
-}
-
-void Algorithm::Run() {
+void Algorithm::Algo() {
   using enum NodeState;
-  if (!isRunning || openSet.empty())
-    return;
-
   Node *node = openSet.top();
   openSet.pop();
+  if (node->state == CLOSED)
+    return;
   if (node == target) {
     isRunning = false;
     return;
@@ -48,14 +40,14 @@ void Algorithm::Run() {
 
   closedSet.push_back(node);
   if (node->state != START)
-    node->state = CLOSED;
+    node->state = CURRENT;
 
   vector<Node *> neighbors;
   neighbors.reserve(4);
   GetNeighbors(node, neighbors);
 
   for (Node *neighbor : neighbors) {
-    if (neighbor->state == CLOSED || node->state == START)
+    if (neighbor->state == CLOSED || neighbor->state == START)
       continue;
 
     int g_temp = node->g + 1;
@@ -68,4 +60,25 @@ void Algorithm::Run() {
     neighbor->state = neighbor->state != TARGET ? OPEN : TARGET;
     openSet.push(neighbor);
   }
+  previousNode = node;
+}
+
+Algorithm::Algorithm(vector<Node> &m_grid, const int &m_nb_col,
+                     const int &m_nb_row, Node *startNode, Node *targetNode)
+    : grid(m_grid), openSet(compare), target(targetNode), nb_col(m_nb_col),
+      nb_row(m_nb_row) {
+  openSet.push(startNode);
+  previousNode = nullptr;
+}
+
+void Algorithm::Run() {
+  using enum NodeState;
+
+  if (previousNode != nullptr && previousNode->state != START)
+    previousNode->state = CLOSED;
+
+  if (!isRunning || openSet.empty())
+    return;
+
+  Algo();
 }

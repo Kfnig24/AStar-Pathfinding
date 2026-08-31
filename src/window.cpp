@@ -2,11 +2,12 @@
 
 using namespace std;
 
-Node* Window::getNodeFromWorldPos(float x, float y) {
+Node *Window::getNodeFromWorldPos(float x, float y) {
   int gridX = static_cast<int>(x / squareSize);
   int gridY = static_cast<int>(y / squareSize);
 
-  if (gridX >= 0 && gridX < nb_col && gridY >= 0 && gridY < nb_row) return &nodes[gridY * nb_col + gridX];
+  if (gridX >= 0 && gridX < nb_col && gridY >= 0 && gridY < nb_row)
+    return &nodes[gridY * nb_col + gridX];
   return nullptr;
 }
 
@@ -36,6 +37,9 @@ void Window::Draw() {
     case CLOSED:
       color = YELLOW;
       break;
+    case CURRENT:
+      color = PURPLE;
+      break;
     }
 
     DrawRectangle(node.x * squareSize, node.y * squareSize, squareSize,
@@ -62,15 +66,17 @@ void Window::HandleInput() {
     targetNode = nullptr;
   }
 
-  if (IsKeyPressed(KEY_S) && startNode != nullptr && targetNode != nullptr && !alg.has_value()) {
+  if (IsKeyPressed(KEY_S) && startNode != nullptr && targetNode != nullptr &&
+      !alg.has_value()) {
     alg.emplace(nodes, nb_col, nb_row, startNode, targetNode);
   }
 
   // -- MOUSE --
   if (startNode == nullptr || targetNode == nullptr) {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-      Node* node = getNodeFromWorldPos(mousePos.x, mousePos.y);
-      if (node == nullptr) return;
+      Node *node = getNodeFromWorldPos(mousePos.x, mousePos.y);
+      if (node == nullptr)
+        return;
       node->state = startNode == nullptr ? START : TARGET;
       if (startNode == nullptr)
         startNode = node;
@@ -81,8 +87,9 @@ void Window::HandleInput() {
   }
 
   if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-    Node* node = getNodeFromWorldPos(mousePos.x, mousePos.y);
-    if (node == nullptr) return;
+    Node *node = getNodeFromWorldPos(mousePos.x, mousePos.y);
+    if (node == nullptr)
+      return;
     if (node->state == START || node->state == TARGET)
       return;
     node->state = WALL;
