@@ -40,6 +40,9 @@ void Window::Draw() {
     case CURRENT:
       color = PURPLE;
       break;
+    case PATH:
+      color = PINK;
+      break;
     }
 
     DrawRectangle(node.x * squareSize, node.y * squareSize, squareSize,

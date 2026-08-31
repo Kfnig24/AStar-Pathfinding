@@ -46,8 +46,9 @@ private:
   OpenSet openSet;
   std::vector<Node *> closedSet;
 
-  const Node *target;
+  Node *target;
   Node *previousNode;
+  Node* pathNode;
 
   bool isRunning = true;
   bool isPathfinding = true;
@@ -58,6 +59,7 @@ private:
   void GetNeighbors(const Node *currentNode, std::vector<Node *> &neighbors);
 
   void Algo();
+  void Backtrack();
 
 public:
   Algorithm(std::vector<Node> &m_grid, const int &m_nb_col, const int &m_nb_row,

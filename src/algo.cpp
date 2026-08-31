@@ -29,12 +29,20 @@ void Algorithm::GetNeighbors(const Node *currentNode,
 
 void Algorithm::Algo() {
   using enum NodeState;
+
+  if (previousNode != nullptr && previousNode->state != START)
+    previousNode->state = CLOSED;
+
+  if (openSet.empty())
+    return;
+
   Node *node = openSet.top();
   openSet.pop();
   if (node->state == CLOSED)
     return;
   if (node == target) {
-    isRunning = false;
+    isPathfinding = false;
+    isBacktracking = true;
     return;
   }
 
@@ -63,22 +71,33 @@ void Algorithm::Algo() {
   previousNode = node;
 }
 
+void Algorithm::Backtrack() {
+  using enum NodeState;
+  if (pathNode == nullptr)
+    pathNode = target;
+
+  if (!(pathNode->state == TARGET || pathNode->state == START))
+    pathNode->state = NodeState::PATH;
+  pathNode = pathNode->parent;
+}
+
 Algorithm::Algorithm(vector<Node> &m_grid, const int &m_nb_col,
                      const int &m_nb_row, Node *startNode, Node *targetNode)
     : grid(m_grid), openSet(compare), target(targetNode), nb_col(m_nb_col),
       nb_row(m_nb_row) {
   openSet.push(startNode);
   previousNode = nullptr;
+  pathNode = nullptr;
 }
 
 void Algorithm::Run() {
   using enum NodeState;
-
-  if (previousNode != nullptr && previousNode->state != START)
-    previousNode->state = CLOSED;
-
-  if (!isRunning || openSet.empty())
+  if (!isRunning)
     return;
 
-  Algo();
+  if (isPathfinding && !isBacktracking)
+    Algo();
+
+  if (!isPathfinding && isBacktracking)
+    Backtrack();
 }
