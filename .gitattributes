@@ -1,0 +1,4 @@
+*.h linguist-language=C++
+
+build/** linguist-vendored
+bin/** linguist-vendored
