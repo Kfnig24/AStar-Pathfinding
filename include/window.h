@@ -23,8 +23,6 @@ private:
   Node* startNode;
   Node* targetNode;
 
-  Font roboto;
-
   Node* getNodeFromWorldPos(float x, float y);
 
   void Draw();

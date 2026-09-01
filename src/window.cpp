@@ -134,8 +134,6 @@ Window::Window(Vector2 &size, string &w_title, double &m_squareSize)
 
   nodes.reserve(nb_col * nb_row);
   GenerateNodes();
-
-  roboto = LoadFont("resources/Roboto.ttf");
 }
 
 void Window::Loop() {
