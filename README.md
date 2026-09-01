@@ -4,17 +4,17 @@ A visual, interactive and real-time representation of the **A\*** Algorithm with
 
 ![A* Demo](docs/anim.gif)
 
-## 🛠️ Technical caracteristics
-- **Memory Architecture Optimized:** Use of a continious 1D `std::vector<Node>` for a cache friendly acces and maximal performance.
-- **Modern C++20:** Use of modern functionnalities `concepts`, `std::format`, `std::optional` and strongly typed enumaration type (`enum class`)
+## 🛠️ Technical characteristics
+- **Memory Architecture Optimized:** Use of a continuous 1D `std::vector<Node>` for a cache friendly access and maximal performance.
+- **Modern C++20:** Use of modern functionalities `concepts`, `std::format`, `std::optional` and strongly typed enumeration type (`enum class`)
 - **Optimized sorting algorithm:** Use of `std::priority_queue` for the Open Set. It allows to sort the nodes when pushed and guarantee maximum efficiency.
 
 ## 🎮 Commands
 | Actions | Command |
 | :--- | :--- |
-| **Choose Start** | First `left clic` |
-| **Choose Target** | Second `left clic`|
-| **Set Walls** | `Left clic` after choosing **Start** and **Target** |
+| **Choose Start** | First `left click` |
+| **Choose Target** | Second `left click`|
+| **Set Walls** | `Left click` after choosing **Start** and **Target** |
 | **Start the algorithm** | `S` after choosing **Start** and **Target** |
 | **Restart** | `R` |
 
@@ -22,7 +22,7 @@ A visual, interactive and real-time representation of the **A\*** Algorithm with
 
 ### Prerequisites
 - **C++20** compatible compiler (GCC 10+, Clang 11+, MSVC)
-- **CMake** 3.2+
+- **CMake** 3.16+
 
 ### Build CMake
 ```bash
